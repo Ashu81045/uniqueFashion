@@ -1,5 +1,10 @@
 import { createRoot } from 'react-dom/client'
-import html2canvas from 'html2canvas'
+// html2canvas-pro (not html2canvas) — the original html2canvas can't parse
+// oklch()/color-mix(), which is what Tailwind v4 compiles color-opacity
+// utilities (e.g. bg-blue-950/50) to; it throws while scanning the page's
+// stylesheet during capture. -pro is a maintained drop-in fork that adds
+// support for these modern CSS color functions.
+import html2canvas from 'html2canvas-pro'
 import { jsPDF } from 'jspdf'
 import { I18nProvider } from '../../i18n/I18nContext'
 import { A4BillLayout } from '../../components/print/A4BillLayout'

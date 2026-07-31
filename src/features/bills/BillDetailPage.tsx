@@ -117,7 +117,7 @@ export function BillDetailPage() {
       <div className="no-print flex flex-col gap-4 p-4">
         <Link
           to="/bills"
-          className="flex w-fit items-center gap-1 text-sm text-slate-500 transition-colors hover:text-blue-700"
+          className="flex w-fit items-center gap-1 text-sm text-slate-500 transition-colors hover:text-blue-400"
         >
           <ArrowLeft size={14} />
           {t('nav.bills')}
@@ -132,7 +132,7 @@ export function BillDetailPage() {
             <Badge tone={statusTone[bill.paymentStatus]}>{t(`bill.${bill.paymentStatus}`)}</Badge>
             <Link
               to={`/ledger/${bill.customerId}`}
-              className="flex items-center gap-1 text-sm font-medium text-blue-700 hover:underline"
+              className="flex items-center gap-1 text-sm font-medium text-blue-400 hover:underline"
             >
               <BookOpen size={14} />
               {t('nav.ledger')}
@@ -160,7 +160,7 @@ export function BillDetailPage() {
             {t('common.download')}
           </Button>
           <Button onClick={handleShareWhatsapp} disabled={sharing}>
-            {sharing ? <Spinner tone="white" /> : <Share2 size={15} />}
+            {sharing ? <Spinner tone="dark" /> : <Share2 size={15} />}
             {t('common.share')}
           </Button>
           {bill.status === 'active' && (

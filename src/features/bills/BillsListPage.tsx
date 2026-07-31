@@ -40,14 +40,15 @@ export function BillsListPage() {
           <p className="text-sm text-slate-500">—</p>
         </Card>
       ) : (
-        <Card className="flex animate-fade-in flex-col divide-y divide-slate-100 overflow-hidden p-0">
-          {bills.map((bill) => (
+        <Card className="flex flex-col divide-y divide-slate-200 overflow-hidden p-0">
+          {bills.map((bill, i) => (
             <Link
               key={bill.id}
               to={`/bills/${bill.id}`}
-              className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-blue-50/50"
+              style={{ animationDelay: `${Math.min(i * 30, 300)}ms` }}
+              className="flex animate-fade-in items-center gap-3 px-4 py-3 [animation-fill-mode:both] transition-colors hover:bg-blue-950/30"
             >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-semibold text-blue-700">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-950/50 text-sm font-semibold text-blue-400">
                 {bill.customerName?.[0]?.toUpperCase() ?? '#'}
               </span>
               <div className="min-w-0 flex-1">

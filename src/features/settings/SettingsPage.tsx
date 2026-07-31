@@ -119,10 +119,10 @@ export function SettingsPage() {
 
         <div className="flex items-center gap-3 pt-2">
           <Button onClick={handleSave} disabled={saving}>
-            {saving ? <Spinner tone="white" /> : t('common.save')}
+            {saving ? <Spinner tone="dark" /> : t('common.save')}
           </Button>
           {saved && (
-            <span className="flex animate-fade-in items-center gap-1.5 text-sm text-green-600">
+            <span className="flex animate-fade-in items-center gap-1.5 text-sm text-green-400">
               <CheckCircle2 size={16} />
               {t('settings.saved')}
             </span>

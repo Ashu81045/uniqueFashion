@@ -32,7 +32,7 @@ export function CollectionSplitCard({
         {t('dashboard.cashCollection')} / {t('dashboard.upiCollection')}
       </p>
 
-      <div className="mb-3 flex h-2 overflow-hidden rounded-full bg-slate-100">
+      <div className="mb-3 flex h-2 overflow-hidden rounded-full bg-slate-200">
         {SEGMENTS.map(({ key, bar }) => {
           const pct = (values[key] / total) * 100
           return pct > 0 ? (

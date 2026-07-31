@@ -32,7 +32,7 @@ export function LedgerPage() {
 
       {/* Recent transactions — bills (debits) and payments (credits) across every customer. */}
       <Card className="p-0">
-        <p className="border-b border-slate-100 px-4 py-2.5 text-xs font-medium uppercase tracking-wide text-slate-500">
+        <p className="border-b border-slate-200 px-4 py-2.5 text-xs font-medium uppercase tracking-wide text-slate-500">
           {t('ledger.recentTransactions')}
         </p>
         {feedLoading ? (
@@ -42,16 +42,17 @@ export function LedgerPage() {
         ) : feed.length === 0 ? (
           <p className="px-4 py-6 text-center text-sm text-slate-400">—</p>
         ) : (
-          <div className="flex flex-col divide-y divide-slate-100">
-            {feed.map((entry) => (
+          <div className="flex flex-col divide-y divide-slate-200">
+            {feed.map((entry, i) => (
               <Link
                 key={entry.key}
                 to={entry.customerMobile ? `/ledger/${entry.customerMobile}` : '#'}
-                className="flex items-center gap-3 px-4 py-2.5 transition-colors hover:bg-blue-50/50"
+                style={{ animationDelay: `${Math.min(i * 30, 300)}ms` }}
+                className="flex animate-fade-in items-center gap-3 px-4 py-2.5 [animation-fill-mode:both] transition-colors hover:bg-blue-950/30"
               >
                 <span
                   className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
-                    entry.type === 'bill' ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-700'
+                    entry.type === 'bill' ? 'bg-red-950/50 text-red-400' : 'bg-green-950/50 text-green-400'
                   }`}
                 >
                   {entry.type === 'bill' ? <ReceiptText size={15} /> : <HandCoins size={15} />}
@@ -68,7 +69,7 @@ export function LedgerPage() {
                 </div>
                 <span
                   className={`shrink-0 text-sm font-semibold ${
-                    entry.type === 'bill' ? 'text-red-600' : 'text-green-700'
+                    entry.type === 'bill' ? 'text-red-400' : 'text-green-400'
                   }`}
                 >
                   {entry.type === 'bill' ? '+' : '−'}
@@ -81,7 +82,7 @@ export function LedgerPage() {
         <RoleGate roles={['admin']}>
           <Link
             to="/collections"
-            className="block border-t border-slate-100 px-4 py-2.5 text-center text-xs font-medium text-blue-700 hover:bg-blue-50"
+            className="block border-t border-slate-200 px-4 py-2.5 text-center text-xs font-medium text-blue-400 hover:bg-blue-950/40"
           >
             {t('common.viewAll')}
           </Link>
@@ -106,14 +107,15 @@ export function LedgerPage() {
           <Spinner />
         </div>
       ) : (
-        <Card className="flex flex-col divide-y divide-slate-100 overflow-hidden p-0">
-          {filtered.map((c) => (
+        <Card className="flex flex-col divide-y divide-slate-200 overflow-hidden p-0">
+          {filtered.map((c, i) => (
             <Link
               key={c.mobile}
               to={`/ledger/${c.mobile}`}
-              className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-blue-50/50"
+              style={{ animationDelay: `${Math.min(i * 30, 300)}ms` }}
+              className="flex animate-fade-in items-center gap-3 px-4 py-3 [animation-fill-mode:both] transition-colors hover:bg-blue-950/30"
             >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-semibold text-blue-700">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-950/50 text-sm font-semibold text-blue-400">
                 {c.name[0]?.toUpperCase() ?? '?'}
               </span>
               <div className="min-w-0 flex-1">
@@ -123,7 +125,7 @@ export function LedgerPage() {
               <div className="text-right">
                 <p className="text-xs text-slate-500">{t('customers.due')}</p>
                 <p
-                  className={`text-sm font-semibold ${c.outstandingBalancePaise > 0 ? 'text-red-600' : 'text-green-600'}`}
+                  className={`text-sm font-semibold ${c.outstandingBalancePaise > 0 ? 'text-red-400' : 'text-green-400'}`}
                 >
                   {formatPaiseAsRupees(c.outstandingBalancePaise)}
                 </p>

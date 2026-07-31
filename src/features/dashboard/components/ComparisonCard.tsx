@@ -26,7 +26,7 @@ export function ComparisonCard({
         <p className="text-xl font-semibold text-slate-900">{formatPaiseAsRupees(currentPaise)}</p>
         <span
           className={`flex items-center gap-0.5 rounded-full px-2 py-0.5 text-xs font-medium ${
-            isUp ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'
+            isUp ? 'bg-green-950/50 text-green-400' : 'bg-red-950/50 text-red-400'
           }`}
         >
           {isUp ? <TrendingUp size={12} /> : <TrendingDown size={12} />}

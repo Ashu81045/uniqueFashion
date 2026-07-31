@@ -11,11 +11,11 @@ export function LoginPage() {
   if (session) return <Navigate to="/" replace />
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center gap-8 overflow-hidden bg-gradient-to-b from-blue-50 via-slate-50 to-slate-50 px-4">
-      <div className="pointer-events-none absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-blue-400/20 blur-3xl" />
+    <div className="relative flex min-h-screen flex-col items-center justify-center gap-8 overflow-hidden bg-gradient-to-b from-blue-950/40 via-slate-50 to-slate-50 px-4">
+      <div className="pointer-events-none absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-blue-400/25 blur-3xl" />
 
       <div className="relative flex animate-slide-up flex-col items-center gap-3 text-center">
-        <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 text-xl font-bold text-white shadow-lg shadow-blue-600/20">
+        <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 text-xl font-bold text-slate-50 shadow-lg shadow-black/40">
           UF
         </span>
         <div>

@@ -1,5 +1,14 @@
 import { NavLink } from 'react-router-dom'
-import { BookOpen, LayoutDashboard, LogOut, Receipt, ReceiptText, Settings, UserCog } from 'lucide-react'
+import {
+  BookOpen,
+  HandCoins,
+  LayoutDashboard,
+  LogOut,
+  Receipt,
+  ReceiptText,
+  Settings,
+  UserCog,
+} from 'lucide-react'
 import { useT } from '../../i18n/I18nContext'
 import { useUiStore } from '../../stores/uiStore'
 import { useAuthStore } from '../../stores/authStore'
@@ -8,7 +17,7 @@ import { RoleGate } from './RoleGate'
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
   `flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-150 ${
-    isActive ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+    isActive ? 'bg-blue-950/50 text-blue-400' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
   }`
 
 export function TopNav() {
@@ -18,10 +27,10 @@ export function TopNav() {
   const session = useAuthStore((s) => s.session)
 
   return (
-    <header className="no-print sticky top-0 z-10 hidden border-b border-slate-200 bg-white/90 backdrop-blur-sm md:block">
+    <header className="no-print sticky top-0 z-10 hidden border-b border-slate-200 bg-slate-50/90 backdrop-blur-sm md:block">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         <div className="flex items-center gap-2.5">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 text-sm font-bold text-white shadow-sm">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 text-sm font-bold text-slate-50 shadow-sm shadow-black/30">
             UF
           </span>
           <span className="text-base font-semibold text-slate-900">{t('app.name')}</span>
@@ -38,6 +47,10 @@ export function TopNav() {
           <NavLink to="/ledger" className={linkClass}>
             <BookOpen size={16} />
             {t('nav.ledger')}
+          </NavLink>
+          <NavLink to="/collections" className={linkClass}>
+            <HandCoins size={16} />
+            {t('dashboard.collections')}
           </NavLink>
           <NavLink to="/dashboard" className={linkClass}>
             <LayoutDashboard size={16} />
@@ -59,19 +72,19 @@ export function TopNav() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setLanguage(language === 'hi' ? 'en' : 'hi')}
-            className="rounded-full border border-slate-300 px-3 py-1 text-xs font-medium text-slate-600 transition-colors hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
+            className="rounded-full border border-slate-300 px-3 py-1 text-xs font-medium text-slate-600 transition-colors hover:border-blue-500 hover:bg-blue-950/40 hover:text-blue-400"
           >
             {language === 'hi' ? 'English' : 'Hinglish'}
           </button>
           <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-100 text-xs font-semibold text-blue-700">
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-950/50 text-xs font-semibold text-blue-400">
               {session?.name?.[0]?.toUpperCase() ?? '?'}
             </span>
             <span className="text-sm text-slate-600">{session?.name}</span>
           </div>
           <button
             onClick={() => signOut()}
-            className="flex h-9 w-9 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-red-950/50 hover:text-red-400"
             aria-label={t('nav.logout')}
             title={t('nav.logout')}
           >

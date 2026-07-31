@@ -49,7 +49,7 @@ export function CustomerCreateModal({
             {t('common.cancel')}
           </Button>
           <Button onClick={handleCreate} disabled={saving || !name.trim()}>
-            {saving ? <Spinner tone="white" /> : t('common.save')}
+            {saving ? <Spinner tone="dark" /> : t('common.save')}
           </Button>
         </div>
       </div>

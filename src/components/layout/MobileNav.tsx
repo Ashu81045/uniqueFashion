@@ -12,14 +12,14 @@ const items = [
 export function MobileNav() {
   const t = useT()
   return (
-    <nav className="no-print pb-safe fixed inset-x-0 bottom-0 z-10 flex rounded-t-2xl border-t border-slate-200 bg-white/95 shadow-[0_-4px_16px_rgba(0,0,0,0.06)] backdrop-blur-sm md:hidden">
+    <nav className="no-print pb-safe fixed inset-x-0 bottom-0 z-10 flex rounded-t-2xl border-t border-slate-200 bg-slate-50/95 shadow-[0_-4px_16px_rgba(0,0,0,0.4)] backdrop-blur-sm md:hidden">
       {items.map(({ to, labelKey, Icon }) => (
         <NavLink
           key={to}
           to={to}
           className={({ isActive }) =>
             `flex flex-1 flex-col items-center gap-1 pt-2.5 pb-1.5 text-xs font-medium transition-colors duration-150 ${
-              isActive ? 'text-blue-700' : 'text-slate-500'
+              isActive ? 'text-blue-400' : 'text-slate-500'
             }`
           }
         >
@@ -27,7 +27,7 @@ export function MobileNav() {
             <>
               <span
                 className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors duration-150 ${
-                  isActive ? 'bg-blue-100' : ''
+                  isActive ? 'bg-blue-950/60' : ''
                 }`}
               >
                 <Icon size={18} />

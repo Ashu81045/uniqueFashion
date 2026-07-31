@@ -51,13 +51,13 @@ export function LineItemsTable({
         {items.map((item, i) => (
           <Card key={i} className="animate-fade-in p-3">
             <div className="mb-2 flex items-center justify-between">
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-xs font-semibold text-blue-700">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-950/50 text-xs font-semibold text-blue-400">
                 {i + 1}
               </span>
               <button
                 type="button"
                 onClick={() => removeItem(i)}
-                className="-m-1.5 flex h-8 w-8 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600"
+                className="-m-1.5 flex h-8 w-8 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-red-950/50 hover:text-red-400"
                 aria-label={t('common.remove')}
               >
                 <X size={16} />
@@ -149,7 +149,7 @@ export function LineItemsTable({
             <button
               type="button"
               onClick={() => removeItem(i)}
-              className="flex h-8 w-8 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600"
+              className="flex h-8 w-8 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-red-950/50 hover:text-red-400"
               aria-label={t('common.remove')}
             >
               <X size={16} />

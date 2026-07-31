@@ -47,13 +47,13 @@ export function LoginForm() {
         required
       />
       {error && (
-        <div className="flex animate-fade-in items-center gap-2 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
+        <div className="flex animate-fade-in items-center gap-2 rounded-lg bg-red-950/40 px-3 py-2 text-sm text-red-400">
           <AlertCircle size={16} className="shrink-0" />
           {error}
         </div>
       )}
       <Button type="submit" disabled={submitting} className="w-full">
-        {submitting ? <Spinner tone="white" /> : t('auth.loginButton')}
+        {submitting ? <Spinner tone="dark" /> : t('auth.loginButton')}
       </Button>
     </form>
   )

@@ -1,4 +1,13 @@
-import { getDocs, limit, orderBy, query, startAfter, type QueryDocumentSnapshot } from 'firebase/firestore'
+import {
+  Timestamp,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  startAfter,
+  where,
+  type QueryDocumentSnapshot,
+} from 'firebase/firestore'
 import { paymentsCollectionGroup } from '../../firebase/firestore'
 import type { CustomerPayment } from '../../types/payment'
 
@@ -27,4 +36,20 @@ export async function fetchCollectionsPage(
   const payments = snap.docs.map((d) => d.data())
   const lastDoc = snap.docs.length > 0 ? snap.docs[snap.docs.length - 1] : null
   return { payments, lastDoc, hasMore: snap.docs.length === COLLECTIONS_PAGE_SIZE }
+}
+
+/**
+ * Every payment recorded since `sinceDate`, across all customers — powers
+ * the per-collector summary (grouped client-side by createdByUid). A single
+ * range+orderBy on the same field (createdAt) needs no composite index.
+ */
+export async function fetchPaymentsSince(sinceDate: Date, limitCount = 300): Promise<CustomerPayment[]> {
+  const q = query(
+    paymentsCollectionGroup(),
+    where('createdAt', '>=', Timestamp.fromDate(sinceDate)),
+    orderBy('createdAt', 'desc'),
+    limit(limitCount),
+  )
+  const snap = await getDocs(q)
+  return snap.docs.map((d) => d.data())
 }

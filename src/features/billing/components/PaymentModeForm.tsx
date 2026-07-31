@@ -54,7 +54,7 @@ export function PaymentModeForm({
 
   return (
     <Card className="flex flex-col gap-3 p-3">
-      <div className="flex gap-2 rounded-lg bg-slate-100 p-1">
+      <div className="flex gap-2 rounded-lg bg-slate-200 p-1">
         {PAYMENT_STATUSES.map((status) => (
           <button
             key={status}
@@ -62,8 +62,8 @@ export function PaymentModeForm({
             onClick={() => handleStatusChange(status)}
             className={`flex-1 rounded-md px-2 py-1.5 text-sm font-medium transition-all duration-150 ${
               paymentStatus === status
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'text-slate-600 hover:bg-white/60'
+                ? 'bg-blue-600 text-slate-50 shadow-sm'
+                : 'text-slate-600 hover:bg-slate-300/60'
             }`}
           >
             {t(`bill.${status}`)}
@@ -96,7 +96,7 @@ export function PaymentModeForm({
               <button
                 type="button"
                 onClick={() => removeSplit(i)}
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-red-950/50 hover:text-red-400"
                 aria-label={t('common.remove')}
               >
                 <X size={16} />
@@ -106,7 +106,7 @@ export function PaymentModeForm({
           <button
             type="button"
             onClick={addSplit}
-            className="flex items-center gap-1 self-start text-sm font-medium text-blue-700 hover:underline"
+            className="flex items-center gap-1 self-start text-sm font-medium text-blue-400 hover:underline"
           >
             <Plus size={14} />
             {t('bill.paymentMode')}
@@ -114,13 +114,13 @@ export function PaymentModeForm({
         </div>
       )}
 
-      <div className="flex flex-col gap-1 border-t border-slate-100 pt-2 text-sm">
+      <div className="flex flex-col gap-1 border-t border-slate-200 pt-2 text-sm">
         <div className="flex justify-between text-slate-600">
           <span>{t('bill.amountPaid')}</span>
           <span>{formatPaiseAsRupees(amountPaidPaise)}</span>
         </div>
         <div
-          className={`flex justify-between font-medium ${dueAmountPaise > 0 ? 'text-red-600' : 'text-slate-900'}`}
+          className={`flex justify-between font-medium ${dueAmountPaise > 0 ? 'text-red-400' : 'text-slate-900'}`}
         >
           <span>{t('bill.due')}</span>
           <span>{formatPaiseAsRupees(dueAmountPaise)}</span>

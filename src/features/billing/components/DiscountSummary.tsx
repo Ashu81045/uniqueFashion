@@ -32,7 +32,7 @@ export function DiscountSummary({
         />
       </label>
 
-      <div className="flex flex-col gap-1.5 border-t border-slate-100 pt-3 text-sm">
+      <div className="flex flex-col gap-1.5 border-t border-slate-200 pt-3 text-sm">
         <Row label={t('bill.totalProductAmount')} value={calculation.totalProductAmountPaise} />
         <Row label={t('bill.totalItemDiscount')} value={-calculation.totalItemDiscountPaise} />
         <Row label={t('bill.overallDiscount')} value={-calculation.overallDiscountPaise} />

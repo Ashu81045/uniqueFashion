@@ -1,9 +1,10 @@
-import { CalendarDays, Clock, FileText, RefreshCw, TrendingUp } from 'lucide-react'
+import { CalendarDays, Clock, FileText, HandCoins, RefreshCw, TrendingUp } from 'lucide-react'
 import { useT } from '../../i18n/I18nContext'
 import { useDailyStatsRange, sumStats } from '../../hooks/useDailyStats'
 import { formatPaiseAsRupees } from '../../lib/billing/formatCurrency'
 import { StatCard } from './components/StatCard'
 import { CollectionSplitCard } from './components/CollectionSplitCard'
+import { NavTile } from './components/NavTile'
 import { Button } from '../../components/ui/Button'
 import { Spinner } from '../../components/ui/Spinner'
 
@@ -63,6 +64,8 @@ export function AccountantDashboardPage() {
             bankTransferPaise={today?.bankTransferCollectedPaise ?? 0}
             otherPaise={today?.otherCollectedPaise ?? 0}
           />
+
+          <NavTile to="/collections" label={t('dashboard.collections')} icon={HandCoins} />
         </>
       )}
     </div>

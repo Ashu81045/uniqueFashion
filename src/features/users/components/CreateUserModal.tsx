@@ -66,13 +66,13 @@ export function CreateUserModal({
             <option value="admin">{t('users.roleAdmin')}</option>
           </select>
         </label>
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm text-red-400">{error}</p>}
         <div className="flex justify-end gap-2">
           <Button variant="secondary" onClick={onClose}>
             {t('common.cancel')}
           </Button>
           <Button onClick={handleCreate} disabled={!canSave}>
-            {saving ? <Spinner tone="white" /> : t('common.save')}
+            {saving ? <Spinner tone="dark" /> : t('common.save')}
           </Button>
         </div>
       </div>

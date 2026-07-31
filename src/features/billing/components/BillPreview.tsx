@@ -32,7 +32,7 @@ export function BillPreview({ data }: { data: BillPreviewData }) {
   const t = useT()
 
   return (
-    <div className="animate-fade-in rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-sm">
+    <div className="animate-fade-in rounded-xl border border-slate-200 bg-slate-100 p-4 text-sm shadow-sm shadow-black/20">
       <div className="mb-3 flex items-center justify-between border-b border-dashed border-slate-300 pb-2">
         <div>
           <p className="font-semibold text-slate-900">{t('app.name')}</p>
@@ -50,32 +50,48 @@ export function BillPreview({ data }: { data: BillPreviewData }) {
         <p className="text-slate-500">{data.customerMobile}</p>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[420px] border-collapse text-left">
-          <thead>
-            <tr className="border-b border-slate-300 text-xs uppercase text-slate-500">
-              <th className="py-1">{t('bill.productName')}</th>
-              <th className="py-1 text-right">{t('bill.qty')}</th>
-              <th className="py-1 text-right">{t('bill.rate')}</th>
-              <th className="py-1 text-right">{t('bill.itemDiscount')}</th>
-              <th className="py-1 text-right">{t('bill.amount')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.items.map((item, i) => (
-              <tr key={i} className="border-b border-slate-100">
-                <td className="py-1.5">{item.name}</td>
-                <td className="py-1.5 text-right">{item.qty}</td>
-                <td className="py-1.5 text-right">{formatPaiseAsRupees(item.ratePaise)}</td>
-                <td className="py-1.5 text-right">
-                  {item.itemDiscountPct > 0 ? `${item.itemDiscountPct}%` : '—'}
-                </td>
-                <td className="py-1.5 text-right">{formatPaiseAsRupees(item.discountedAmountPaise)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Mobile: stacked rows (no horizontal scroll). Desktop/tablet: full table. */}
+      <div className="flex flex-col divide-y divide-slate-200 sm:hidden">
+        {data.items.map((item, i) => (
+          <div key={i} className="flex items-center justify-between gap-2 py-1.5">
+            <div className="min-w-0">
+              <p className="truncate text-slate-900">{item.name}</p>
+              <p className="text-xs text-slate-500">
+                {item.qty} × {formatPaiseAsRupees(item.ratePaise)}
+                {item.itemDiscountPct > 0 ? ` · -${item.itemDiscountPct}%` : ''}
+              </p>
+            </div>
+            <span className="shrink-0 font-medium text-slate-900">
+              {formatPaiseAsRupees(item.discountedAmountPaise)}
+            </span>
+          </div>
+        ))}
       </div>
+
+      <table className="hidden w-full border-collapse text-left sm:table">
+        <thead>
+          <tr className="border-b border-slate-300 text-xs uppercase text-slate-500">
+            <th className="py-1">{t('bill.productName')}</th>
+            <th className="py-1 text-right">{t('bill.qty')}</th>
+            <th className="py-1 text-right">{t('bill.rate')}</th>
+            <th className="py-1 text-right">{t('bill.itemDiscount')}</th>
+            <th className="py-1 text-right">{t('bill.amount')}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.items.map((item, i) => (
+            <tr key={i} className="border-b border-slate-200">
+              <td className="py-1.5">{item.name}</td>
+              <td className="py-1.5 text-right">{item.qty}</td>
+              <td className="py-1.5 text-right">{formatPaiseAsRupees(item.ratePaise)}</td>
+              <td className="py-1.5 text-right">
+                {item.itemDiscountPct > 0 ? `${item.itemDiscountPct}%` : '—'}
+              </td>
+              <td className="py-1.5 text-right">{formatPaiseAsRupees(item.discountedAmountPaise)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
       <div className="mt-3 flex flex-col gap-1 border-t border-dashed border-slate-300 pt-2">
         <SummaryRow label={t('bill.totalProductAmount')} value={data.totalProductAmountPaise} />

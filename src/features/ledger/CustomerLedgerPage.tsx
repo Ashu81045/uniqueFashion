@@ -85,7 +85,7 @@ export function CustomerLedgerPage() {
   return (
     <div className="flex animate-fade-in flex-col gap-4 p-4">
       <div className="flex items-center gap-3">
-        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-100 text-base font-semibold text-blue-700">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-950/50 text-base font-semibold text-blue-400">
           {customer.name[0]?.toUpperCase() ?? '?'}
         </span>
         <div className="min-w-0 flex-1">
@@ -94,13 +94,13 @@ export function CustomerLedgerPage() {
         </div>
         <div
           className={`shrink-0 rounded-lg px-3 py-1.5 text-right ${
-            hasOutstanding ? 'bg-red-50' : 'bg-green-50'
+            hasOutstanding ? 'bg-red-950/40' : 'bg-green-950/40'
           }`}
         >
-          <p className={`text-xs ${hasOutstanding ? 'text-red-600' : 'text-green-600'}`}>
+          <p className={`text-xs ${hasOutstanding ? 'text-red-400' : 'text-green-400'}`}>
             {t('ledger.outstandingBalance')}
           </p>
-          <p className={`text-sm font-semibold ${hasOutstanding ? 'text-red-700' : 'text-green-700'}`}>
+          <p className={`text-sm font-semibold ${hasOutstanding ? 'text-red-300' : 'text-green-300'}`}>
             {formatPaiseAsRupees(customer.outstandingBalancePaise)}
           </p>
         </div>
@@ -131,7 +131,7 @@ export function CustomerLedgerPage() {
         </label>
         <Input label={t('ledger.remarks')} value={note} onChange={(e) => setNote(e.target.value)} />
         <Button onClick={handleRecordPayment} disabled={saving || !amount}>
-          {saving ? <Spinner tone="white" /> : <PiggyBank size={16} />}
+          {saving ? <Spinner tone="dark" /> : <PiggyBank size={16} />}
           {t('common.save')}
         </Button>
       </Card>

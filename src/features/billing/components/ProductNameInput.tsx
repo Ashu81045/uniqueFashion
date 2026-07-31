@@ -27,7 +27,7 @@ export function ProductNameInput({
         placeholder={placeholder}
       />
       {showDropdown && (
-        <div className="absolute left-0 right-0 top-full z-10 mt-1 max-h-48 animate-fade-in overflow-y-auto rounded-lg border border-slate-200 bg-white py-1 shadow-md">
+        <div className="absolute left-0 right-0 top-full z-10 mt-1 max-h-48 animate-fade-in overflow-y-auto rounded-lg border border-slate-200 bg-slate-100 py-1 shadow-md shadow-black/30">
           {suggestions.map((s) => (
             <button
               key={s.nameLower}
@@ -37,7 +37,7 @@ export function ProductNameInput({
                 onChange(s.name)
                 setFocused(false)
               }}
-              className="block w-full px-3 py-2 text-left text-sm text-slate-700 hover:bg-blue-50"
+              className="block w-full px-3 py-2 text-left text-sm text-slate-700 hover:bg-blue-950/40"
             >
               {s.name}
             </button>

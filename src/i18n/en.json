@@ -137,5 +137,11 @@
   "customers.search": "Search by name or mobile",
   "customers.due": "Due",
 
-  "collections.title": "Payment History"
+  "collections.title": "Collections",
+  "collections.history": "Payment History",
+  "collections.logCollection": "Log a Collection",
+  "collections.collectorSummary": "Collector Summary",
+  "collections.myCollections": "My Collections",
+  "collections.entries": "entries",
+  "dashboard.collections": "Collections"
 }

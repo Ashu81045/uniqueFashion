@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import {
   AlertTriangle,
   CalendarDays,
@@ -25,6 +24,7 @@ import { CollectionSplitCard } from './components/CollectionSplitCard'
 import { SalesTrendChart } from './components/SalesTrendChart'
 import { ComparisonCard } from './components/ComparisonCard'
 import { TopList } from './components/TopList'
+import { NavTile } from './components/NavTile'
 import { Button } from '../../components/ui/Button'
 import { Spinner } from '../../components/ui/Spinner'
 
@@ -142,38 +142,16 @@ export function AdminDashboardPage() {
             otherPaise={month.otherCollectedPaise}
           />
 
-          {/* TopNav hides Settings/Users/Collections links on mobile — surface them here instead. */}
-          <div className="flex flex-wrap gap-2 md:hidden">
-            <Link
-              to="/collections"
-              className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-dashed border-slate-300 px-3 py-2.5 text-sm font-medium text-blue-700 transition-colors hover:border-blue-300 hover:bg-blue-50"
-            >
-              <HandCoins size={16} />
-              {t('dashboard.viewCollections')}
-            </Link>
-            <Link
-              to="/settings"
-              className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-dashed border-slate-300 px-3 py-2.5 text-sm font-medium text-blue-700 transition-colors hover:border-blue-300 hover:bg-blue-50"
-            >
-              <Settings size={16} />
-              {t('nav.settings')}
-            </Link>
-            <Link
-              to="/users"
-              className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-dashed border-slate-300 px-3 py-2.5 text-sm font-medium text-blue-700 transition-colors hover:border-blue-300 hover:bg-blue-50"
-            >
-              <UserCog size={16} />
-              {t('nav.users')}
-            </Link>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <NavTile to="/collections" label={t('dashboard.collections')} icon={HandCoins} />
+            {/* TopNav already shows these on desktop — surface them here too for mobile. */}
+            <div className="sm:hidden">
+              <NavTile to="/settings" label={t('nav.settings')} icon={Settings} />
+            </div>
+            <div className="sm:hidden">
+              <NavTile to="/users" label={t('nav.users')} icon={UserCog} />
+            </div>
           </div>
-
-          <Link
-            to="/collections"
-            className="hidden items-center justify-center gap-1.5 rounded-lg border border-dashed border-slate-300 px-3 py-2.5 text-sm font-medium text-blue-700 transition-colors hover:border-blue-300 hover:bg-blue-50 md:flex"
-          >
-            <HandCoins size={16} />
-            {t('dashboard.viewCollections')}
-          </Link>
         </>
       )}
     </div>

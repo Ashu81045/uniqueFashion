@@ -56,10 +56,10 @@ export function UsersPage() {
           <Spinner />
         </div>
       ) : (
-        <Card className="flex flex-col divide-y divide-slate-100 overflow-hidden p-0">
+        <Card className="flex flex-col divide-y divide-slate-200 overflow-hidden p-0">
           {users.map((u) => (
             <div key={u.uid} className="flex flex-wrap items-center gap-3 px-4 py-3">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-semibold text-blue-700">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-950/50 text-sm font-semibold text-blue-400">
                 {u.name[0]?.toUpperCase() ?? '?'}
               </span>
               <div className="min-w-0 flex-1">

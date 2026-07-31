@@ -71,14 +71,9 @@ export function AppRouter() {
               </RequireAdmin>
             }
           />
-          <Route
-            path="/collections"
-            element={
-              <RequireAdmin>
-                <CollectionsPage />
-              </RequireAdmin>
-            }
-          />
+          {/* Both roles can log/view collections — rules already allow any
+              active staff to read the payments collection-group. */}
+          <Route path="/collections" element={<CollectionsPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

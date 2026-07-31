@@ -2,11 +2,13 @@ import type { ReactNode } from 'react'
 
 type Tone = 'green' | 'amber' | 'red' | 'slate'
 
+// Dark-tinted chip + bright text + subtle ring reads better on a dark
+// surface than a pale pastel pill would (which looks like a cutout).
 const toneClasses: Record<Tone, string> = {
-  green: 'bg-green-50 text-green-700 ring-1 ring-inset ring-green-200',
-  amber: 'bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200',
-  red: 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-200',
-  slate: 'bg-slate-100 text-slate-700 ring-1 ring-inset ring-slate-200',
+  green: 'bg-green-950/60 text-green-400 ring-1 ring-inset ring-green-700/60',
+  amber: 'bg-amber-950/60 text-amber-400 ring-1 ring-inset ring-amber-700/60',
+  red: 'bg-red-950/60 text-red-400 ring-1 ring-inset ring-red-700/60',
+  slate: 'bg-slate-200/60 text-slate-700 ring-1 ring-inset ring-slate-300/60',
 }
 
 const dotClasses: Record<Tone, string> = {

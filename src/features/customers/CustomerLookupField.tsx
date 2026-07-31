@@ -45,11 +45,11 @@ export function CustomerLookupField({
       </div>
 
       {customer && (
-        <div className="flex animate-fade-in items-start gap-2 rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-sm">
-          <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-green-600" />
+        <div className="flex animate-fade-in items-start gap-2 rounded-lg border border-green-700/50 bg-green-950/40 px-3 py-2 text-sm">
+          <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-green-400" />
           <div>
-            <p className="font-medium text-green-900">{customer.name}</p>
-            <p className="text-green-700">
+            <p className="font-medium text-green-300">{customer.name}</p>
+            <p className="text-green-500">
               {t('ledger.outstandingBalance')}: {formatPaiseAsRupees(customer.outstandingBalancePaise)}
             </p>
           </div>
@@ -60,7 +60,7 @@ export function CustomerLookupField({
         <button
           type="button"
           onClick={() => setShowCreate(true)}
-          className="flex animate-fade-in items-center gap-2 rounded-lg border border-dashed border-slate-300 px-3 py-2.5 text-left text-sm text-blue-700 transition-colors hover:border-blue-300 hover:bg-blue-50"
+          className="flex animate-fade-in items-center gap-2 rounded-lg border border-dashed border-slate-300 px-3 py-2.5 text-left text-sm text-blue-400 transition-colors hover:border-blue-500 hover:bg-blue-950/40"
         >
           <UserPlus size={16} className="shrink-0" />
           {t('customer.notFound')} — {t('customer.createNew')}
