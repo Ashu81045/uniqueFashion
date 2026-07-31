@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { BookOpen, LayoutDashboard, Receipt, ReceiptText } from 'lucide-react'
+import { BookOpen, LayoutDashboard, Receipt, ReceiptText, UserCircle } from 'lucide-react'
 import { useT } from '../../i18n/I18nContext'
 
 const items = [
@@ -7,6 +7,7 @@ const items = [
   { to: '/bills', labelKey: 'nav.bills', Icon: Receipt },
   { to: '/ledger', labelKey: 'nav.ledger', Icon: BookOpen },
   { to: '/dashboard', labelKey: 'nav.dashboard', Icon: LayoutDashboard },
+  { to: '/profile', labelKey: 'nav.profile', Icon: UserCircle },
 ] as const
 
 export function MobileNav() {

@@ -1,6 +1,7 @@
 import { Plus, X } from 'lucide-react'
 import { useT } from '../../../i18n/I18nContext'
 import { paiseToRupees, rupeesToPaise, formatPaiseAsRupees } from '../../../lib/billing/formatCurrency'
+import { numberInputValue, parseNumberInput } from '../../../lib/utils/number'
 import { Card } from '../../../components/ui/Card'
 import type { BillPaymentModeSplit, PaymentStatus } from '../../../types/bill'
 import type { PaymentMode } from '../../../types/payment'
@@ -89,8 +90,8 @@ export function PaymentModeForm({
               <input
                 type="number"
                 min={0}
-                value={paiseToRupees(split.amountPaise)}
-                onChange={(e) => updateSplit(i, { amountPaise: rupeesToPaise(Number(e.target.value)) })}
+                value={numberInputValue(paiseToRupees(split.amountPaise))}
+                onChange={(e) => updateSplit(i, { amountPaise: rupeesToPaise(parseNumberInput(e.target.value)) })}
                 className="min-h-9 w-24 rounded-md border border-slate-300 px-2 py-1.5 text-right text-sm transition-shadow focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
               />
               <button

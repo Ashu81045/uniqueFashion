@@ -9,6 +9,7 @@
   "nav.settings": "Settings",
   "nav.users": "Users",
   "nav.collections": "Collections",
+  "nav.profile": "Profile",
   "nav.logout": "Logout",
 
   "auth.login": "Login",

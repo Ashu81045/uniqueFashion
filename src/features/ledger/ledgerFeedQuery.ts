@@ -1,5 +1,5 @@
 import { fetchBillsPage } from '../bills/billsQuery'
-import { fetchCollectionsPage } from '../collections/collectionsQuery'
+import { fetchAllPayments } from '../collections/collectionsQuery'
 import type { PaymentMode } from '../../types/payment'
 import type { UserRole } from '../../types/user'
 
@@ -25,10 +25,7 @@ export async function fetchRecentLedgerFeed(
   uid: string,
   limitCount = 15,
 ): Promise<LedgerFeedEntry[]> {
-  const [billsPage, collectionsPage] = await Promise.all([
-    fetchBillsPage(role, uid, null),
-    fetchCollectionsPage(null),
-  ])
+  const [billsPage, payments] = await Promise.all([fetchBillsPage(role, uid, null), fetchAllPayments()])
 
   const billEntries: LedgerFeedEntry[] = billsPage.bills.map((bill) => ({
     key: `bill-${bill.id}`,
@@ -40,7 +37,7 @@ export async function fetchRecentLedgerFeed(
     date: bill.createdAt?.toDate?.() ?? new Date(),
   }))
 
-  const paymentEntries: LedgerFeedEntry[] = collectionsPage.payments.map((payment) => ({
+  const paymentEntries: LedgerFeedEntry[] = payments.map((payment) => ({
     key: `payment-${payment.id}`,
     type: 'payment',
     customerMobile: payment.customerMobile ?? '',

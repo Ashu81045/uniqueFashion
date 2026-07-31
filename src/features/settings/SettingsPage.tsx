@@ -6,6 +6,7 @@ import { Card } from '../../components/ui/Card'
 import { Input } from '../../components/ui/Input'
 import { Spinner } from '../../components/ui/Spinner'
 import { useBusinessSettings, invalidateBusinessSettingsCache } from '../../hooks/useBusinessSettings'
+import { numberInputValue, parseNumberInput } from '../../lib/utils/number'
 import { saveBusinessSettings } from './settingsService'
 import type { BusinessSettings } from '../../types/settings'
 
@@ -101,8 +102,8 @@ export function SettingsPage() {
             min={0}
             max={100}
             label={t('settings.defaultDiscount')}
-            value={form.defaultOverallDiscountPct}
-            onChange={(e) => update('defaultOverallDiscountPct', Number(e.target.value))}
+            value={numberInputValue(form.defaultOverallDiscountPct)}
+            onChange={(e) => update('defaultOverallDiscountPct', parseNumberInput(e.target.value))}
           />
           <label className="flex flex-col gap-1 text-sm">
             <span className="font-medium text-slate-700">{t('settings.thermalWidth')}</span>

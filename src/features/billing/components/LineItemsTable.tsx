@@ -4,6 +4,7 @@ import { Card } from '../../../components/ui/Card'
 import { ProductNameInput } from './ProductNameInput'
 import { useT } from '../../../i18n/I18nContext'
 import { formatPaiseAsRupees, paiseToRupees, rupeesToPaise } from '../../../lib/billing/formatCurrency'
+import { numberInputValue, parseNumberInput } from '../../../lib/utils/number'
 import type { BillLineItemInput } from '../../../lib/billing/calculateBill'
 
 function rowAmountPaise(item: BillLineItemInput): number {
@@ -38,10 +39,10 @@ export function LineItemsTable({
   return (
     <div className="flex flex-col gap-2">
       {/* Desktop/tablet: compact grid rows */}
-      <div className="hidden gap-2 text-xs font-medium text-slate-500 sm:grid sm:grid-cols-[1fr_4rem_5rem_4rem_5rem_2.25rem]">
+      <div className="hidden gap-2 text-xs font-medium text-slate-500 sm:grid sm:grid-cols-[1fr_5rem_4rem_4rem_5rem_2.25rem]">
         <span>{t('bill.productName')}</span>
-        <span>{t('bill.qty')}</span>
         <span>{t('bill.rate')}</span>
+        <span>{t('bill.qty')}</span>
         <span>{t('bill.itemDiscount')}</span>
         <span>{t('bill.amount')}</span>
         <span />
@@ -71,23 +72,23 @@ export function LineItemsTable({
             />
             <div className="grid grid-cols-3 gap-2">
               <label className="flex flex-col gap-1 text-[11px] text-slate-500">
-                {t('bill.qty')}
-                <input
-                  type="number"
-                  min={0}
-                  className={fieldClass}
-                  value={item.qty}
-                  onChange={(e) => updateItem(i, { qty: Number(e.target.value) })}
-                />
-              </label>
-              <label className="flex flex-col gap-1 text-[11px] text-slate-500">
                 {t('bill.rate')}
                 <input
                   type="number"
                   min={0}
                   className={fieldClass}
-                  value={paiseToRupees(item.ratePaise)}
-                  onChange={(e) => updateItem(i, { ratePaise: rupeesToPaise(Number(e.target.value)) })}
+                  value={numberInputValue(paiseToRupees(item.ratePaise))}
+                  onChange={(e) => updateItem(i, { ratePaise: rupeesToPaise(parseNumberInput(e.target.value)) })}
+                />
+              </label>
+              <label className="flex flex-col gap-1 text-[11px] text-slate-500">
+                {t('bill.qty')}
+                <input
+                  type="number"
+                  min={0}
+                  className={fieldClass}
+                  value={numberInputValue(item.qty)}
+                  onChange={(e) => updateItem(i, { qty: parseNumberInput(e.target.value) })}
                 />
               </label>
               <label className="flex flex-col gap-1 text-[11px] text-slate-500">
@@ -97,8 +98,8 @@ export function LineItemsTable({
                   min={0}
                   max={100}
                   className={fieldClass}
-                  value={item.itemDiscountPct}
-                  onChange={(e) => updateItem(i, { itemDiscountPct: Number(e.target.value) })}
+                  value={numberInputValue(item.itemDiscountPct)}
+                  onChange={(e) => updateItem(i, { itemDiscountPct: parseNumberInput(e.target.value) })}
                 />
               </label>
             </div>
@@ -113,7 +114,7 @@ export function LineItemsTable({
         {items.map((item, i) => (
           <div
             key={i}
-            className="grid animate-fade-in grid-cols-[1fr_4rem_5rem_4rem_5rem_2.25rem] items-center gap-2"
+            className="grid animate-fade-in grid-cols-[1fr_5rem_4rem_4rem_5rem_2.25rem] items-center gap-2"
           >
             <ProductNameInput
               className={fieldClass}
@@ -125,23 +126,23 @@ export function LineItemsTable({
               type="number"
               min={0}
               className={fieldClass}
-              value={item.qty}
-              onChange={(e) => updateItem(i, { qty: Number(e.target.value) })}
+              value={numberInputValue(paiseToRupees(item.ratePaise))}
+              onChange={(e) => updateItem(i, { ratePaise: rupeesToPaise(parseNumberInput(e.target.value)) })}
             />
             <input
               type="number"
               min={0}
               className={fieldClass}
-              value={paiseToRupees(item.ratePaise)}
-              onChange={(e) => updateItem(i, { ratePaise: rupeesToPaise(Number(e.target.value)) })}
+              value={numberInputValue(item.qty)}
+              onChange={(e) => updateItem(i, { qty: parseNumberInput(e.target.value) })}
             />
             <input
               type="number"
               min={0}
               max={100}
               className={fieldClass}
-              value={item.itemDiscountPct}
-              onChange={(e) => updateItem(i, { itemDiscountPct: Number(e.target.value) })}
+              value={numberInputValue(item.itemDiscountPct)}
+              onChange={(e) => updateItem(i, { itemDiscountPct: parseNumberInput(e.target.value) })}
             />
             <span className="text-sm font-medium text-slate-700">
               {formatPaiseAsRupees(rowAmountPaise(item))}

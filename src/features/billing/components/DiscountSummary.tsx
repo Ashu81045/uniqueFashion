@@ -1,6 +1,7 @@
 import { Percent } from 'lucide-react'
 import { useT } from '../../../i18n/I18nContext'
 import { formatPaiseAsRupees } from '../../../lib/billing/formatCurrency'
+import { numberInputValue, parseNumberInput } from '../../../lib/utils/number'
 import { Card } from '../../../components/ui/Card'
 import type { BillCalculationResult } from '../../../lib/billing/calculateBill'
 
@@ -26,8 +27,8 @@ export function DiscountSummary({
           type="number"
           min={0}
           max={100}
-          value={overallDiscountPct}
-          onChange={(e) => onOverallDiscountChange(Number(e.target.value))}
+          value={numberInputValue(overallDiscountPct)}
+          onChange={(e) => onOverallDiscountChange(parseNumberInput(e.target.value))}
           className="min-h-9 w-20 rounded-md border border-slate-300 px-2 py-1 text-right text-sm transition-shadow focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
         />
       </label>

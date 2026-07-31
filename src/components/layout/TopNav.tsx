@@ -1,19 +1,7 @@
 import { NavLink } from 'react-router-dom'
-import {
-  BookOpen,
-  HandCoins,
-  LayoutDashboard,
-  LogOut,
-  Receipt,
-  ReceiptText,
-  Settings,
-  UserCog,
-} from 'lucide-react'
+import { BookOpen, LayoutDashboard, Receipt, ReceiptText } from 'lucide-react'
 import { useT } from '../../i18n/I18nContext'
-import { useUiStore } from '../../stores/uiStore'
 import { useAuthStore } from '../../stores/authStore'
-import { signOut } from '../../firebase/auth'
-import { RoleGate } from './RoleGate'
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
   `flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-150 ${
@@ -22,8 +10,6 @@ const linkClass = ({ isActive }: { isActive: boolean }) =>
 
 export function TopNav() {
   const t = useT()
-  const language = useUiStore((s) => s.language)
-  const setLanguage = useUiStore((s) => s.setLanguage)
   const session = useAuthStore((s) => s.session)
 
   return (
@@ -48,49 +34,17 @@ export function TopNav() {
             <BookOpen size={16} />
             {t('nav.ledger')}
           </NavLink>
-          <NavLink to="/collections" className={linkClass}>
-            <HandCoins size={16} />
-            {t('dashboard.collections')}
-          </NavLink>
           <NavLink to="/dashboard" className={linkClass}>
             <LayoutDashboard size={16} />
             {t('nav.dashboard')}
           </NavLink>
-          <RoleGate roles={['admin']}>
-            <NavLink to="/settings" className={linkClass}>
-              <Settings size={16} />
-              {t('nav.settings')}
-            </NavLink>
-          </RoleGate>
-          <RoleGate roles={['admin']}>
-            <NavLink to="/users" className={linkClass}>
-              <UserCog size={16} />
-              {t('nav.users')}
-            </NavLink>
-          </RoleGate>
         </nav>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setLanguage(language === 'hi' ? 'en' : 'hi')}
-            className="rounded-full border border-slate-300 px-3 py-1 text-xs font-medium text-slate-600 transition-colors hover:border-blue-500 hover:bg-blue-950/40 hover:text-blue-400"
-          >
-            {language === 'hi' ? 'English' : 'Hinglish'}
-          </button>
-          <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-950/50 text-xs font-semibold text-blue-400">
-              {session?.name?.[0]?.toUpperCase() ?? '?'}
-            </span>
-            <span className="text-sm text-slate-600">{session?.name}</span>
-          </div>
-          <button
-            onClick={() => signOut()}
-            className="flex h-9 w-9 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-red-950/50 hover:text-red-400"
-            aria-label={t('nav.logout')}
-            title={t('nav.logout')}
-          >
-            <LogOut size={16} />
-          </button>
-        </div>
+        <NavLink to="/profile" className={linkClass}>
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-950/50 text-xs font-semibold text-blue-400">
+            {session?.name?.[0]?.toUpperCase() ?? '?'}
+          </span>
+          {t('nav.profile')}
+        </NavLink>
       </div>
     </header>
   )

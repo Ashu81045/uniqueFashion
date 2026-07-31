@@ -72,8 +72,8 @@ export function BillPreview({ data }: { data: BillPreviewData }) {
         <thead>
           <tr className="border-b border-slate-300 text-xs uppercase text-slate-500">
             <th className="py-1">{t('bill.productName')}</th>
-            <th className="py-1 text-right">{t('bill.qty')}</th>
             <th className="py-1 text-right">{t('bill.rate')}</th>
+            <th className="py-1 text-right">{t('bill.qty')}</th>
             <th className="py-1 text-right">{t('bill.itemDiscount')}</th>
             <th className="py-1 text-right">{t('bill.amount')}</th>
           </tr>
@@ -82,8 +82,8 @@ export function BillPreview({ data }: { data: BillPreviewData }) {
           {data.items.map((item, i) => (
             <tr key={i} className="border-b border-slate-200">
               <td className="py-1.5">{item.name}</td>
-              <td className="py-1.5 text-right">{item.qty}</td>
               <td className="py-1.5 text-right">{formatPaiseAsRupees(item.ratePaise)}</td>
+              <td className="py-1.5 text-right">{item.qty}</td>
               <td className="py-1.5 text-right">
                 {item.itemDiscountPct > 0 ? `${item.itemDiscountPct}%` : '—'}
               </td>

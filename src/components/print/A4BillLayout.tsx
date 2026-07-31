@@ -44,8 +44,8 @@ export function A4BillLayout({ data, settings }: { data: BillPreviewData; settin
         <thead>
           <tr className="border-b-2 border-black text-left">
             <th className="py-2">{t('bill.productName')}</th>
-            <th className="py-2 text-right">{t('bill.qty')}</th>
             <th className="py-2 text-right">{t('bill.rate')}</th>
+            <th className="py-2 text-right">{t('bill.qty')}</th>
             <th className="py-2 text-right">{t('bill.itemDiscount')}</th>
             <th className="py-2 text-right">{t('bill.amount')}</th>
           </tr>
@@ -54,8 +54,8 @@ export function A4BillLayout({ data, settings }: { data: BillPreviewData; settin
           {data.items.map((item, i) => (
             <tr key={i} className="border-b border-neutral-200">
               <td className="py-2">{item.name}</td>
-              <td className="py-2 text-right">{item.qty}</td>
               <td className="py-2 text-right">{formatPaiseAsRupees(item.ratePaise)}</td>
+              <td className="py-2 text-right">{item.qty}</td>
               <td className="py-2 text-right">
                 {item.itemDiscountPct > 0 ? `${item.itemDiscountPct}%` : '—'}
               </td>

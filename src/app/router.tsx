@@ -13,6 +13,7 @@ import { DashboardPage } from '../features/dashboard/DashboardPage'
 import { SettingsPage } from '../features/settings/SettingsPage'
 import { UsersPage } from '../features/users/UsersPage'
 import { CollectionsPage } from '../features/collections/CollectionsPage'
+import { ProfilePage } from '../features/profile/ProfilePage'
 
 function RequireAuth({ children }: { children: ReactNode }) {
   const status = useAuthStore((s) => s.status)
@@ -74,6 +75,7 @@ export function AppRouter() {
           {/* Both roles can log/view collections — rules already allow any
               active staff to read the payments collection-group. */}
           <Route path="/collections" element={<CollectionsPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

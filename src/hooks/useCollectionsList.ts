@@ -1,43 +1,43 @@
 import { useCallback, useEffect, useState } from 'react'
-import type { QueryDocumentSnapshot } from 'firebase/firestore'
-import { fetchCollectionsPage } from '../features/collections/collectionsQuery'
+import { fetchAllPayments } from '../features/collections/collectionsQuery'
 import type { CustomerPayment } from '../types/payment'
 
+const PAGE_SIZE = 20
+
+/**
+ * `fetchAllPayments` reads the whole collection group in one go (see its
+ * doc comment for why), so "pagination" here just reveals more of the
+ * already-fetched, already-sorted list — no extra Firestore reads.
+ */
 export function useCollectionsList() {
-  const [payments, setPayments] = useState<CustomerPayment[]>([])
-  const [lastDoc, setLastDoc] = useState<QueryDocumentSnapshot<CustomerPayment> | null>(null)
-  const [hasMore, setHasMore] = useState(false)
+  const [allPayments, setAllPayments] = useState<CustomerPayment[]>([])
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
   const [loading, setLoading] = useState(false)
 
-  const loadFirstPage = useCallback(async () => {
+  const refresh = useCallback(async () => {
     setLoading(true)
     try {
-      const page = await fetchCollectionsPage(null)
-      setPayments(page.payments)
-      setLastDoc(page.lastDoc)
-      setHasMore(page.hasMore)
+      const payments = await fetchAllPayments()
+      setAllPayments(payments)
+      setVisibleCount(PAGE_SIZE)
     } finally {
       setLoading(false)
     }
   }, [])
 
-  const loadMore = useCallback(async () => {
-    if (!lastDoc) return
-    setLoading(true)
-    try {
-      const page = await fetchCollectionsPage(lastDoc)
-      setPayments((prev) => [...prev, ...page.payments])
-      setLastDoc(page.lastDoc)
-      setHasMore(page.hasMore)
-    } finally {
-      setLoading(false)
-    }
-  }, [lastDoc])
+  const loadMore = useCallback(() => {
+    setVisibleCount((count) => count + PAGE_SIZE)
+  }, [])
 
   useEffect(() => {
-    loadFirstPage()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    refresh()
+  }, [refresh])
 
-  return { payments, loading, hasMore, loadMore, refresh: loadFirstPage }
+  return {
+    payments: allPayments.slice(0, visibleCount),
+    loading,
+    hasMore: visibleCount < allPayments.length,
+    loadMore,
+    refresh,
+  }
 }

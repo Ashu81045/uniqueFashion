@@ -68,6 +68,17 @@ service cloud.firestore {
       }
     }
 
+    // ---- payments (collection group) ----
+    // The nested rule above only authorizes direct reads of one customer's
+    // payments subcollection. A collectionGroup('payments') query — used by
+    // the Collections page, the ledger's "Recent Transactions" feed, and the
+    // collector summary to read across every customer at once — is a
+    // different request type that Firestore only authorizes via a rule
+    // declared with the {path=**} wildcard, hence this separate block.
+    match /{path=**}/payments/{paymentId} {
+      allow read: if isActiveStaff();
+    }
+
     // ---- bills ----
     match /bills/{billId} {
       // Admins see everything; accountants only their own bills (per spec:
