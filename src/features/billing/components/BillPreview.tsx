@@ -27,7 +27,15 @@ export interface BillPreviewData {
  * Total Product Amount -> Overall Discount -> Additional Item Discounts ->
  * Total Discount -> Net Amount Payable, in that exact order. Shared by the
  * on-screen preview, thermal/A4 print layouts, and PDF/WhatsApp share.
+ *
+ * The desktop item grid intentionally uses CSS Grid, not <table>/<colgroup>.
+ * Native table column-width hints (via <col>) are unreliable across browser
+ * print engines and html2canvas (used for PDF export) alike — columns can
+ * end up colliding instead of respecting their assigned widths.
+ * `grid-template-columns` renders consistently everywhere this data ends up.
  */
+const ITEM_GRID_COLS = 'grid-cols-[3.8fr_1.6fr_1fr_1.6fr_2fr]'
+
 export function BillPreview({ data }: { data: BillPreviewData }) {
   const t = useT()
 
@@ -50,7 +58,7 @@ export function BillPreview({ data }: { data: BillPreviewData }) {
         <p className="text-slate-500">{data.customerMobile}</p>
       </div>
 
-      {/* Mobile: stacked rows (no horizontal scroll). Desktop/tablet: full table. */}
+      {/* Mobile: stacked rows (no horizontal scroll). Desktop/tablet: grid "table". */}
       <div className="flex flex-col divide-y divide-slate-200 sm:hidden">
         {data.items.map((item, i) => (
           <div key={i} className="flex items-center justify-between gap-2 py-1.5">
@@ -68,43 +76,29 @@ export function BillPreview({ data }: { data: BillPreviewData }) {
         ))}
       </div>
 
-      {/*
-        table-fixed + colgroup: without this, an auto-layout table sizes its
-        Product Name column to fit the longest name, which can push the
-        Amount column past the card's right edge (clipped, not scrolled,
-        since this container has no overflow-x-auto).
-      */}
-      <table className="hidden w-full table-fixed border-collapse text-left sm:table">
-        <colgroup>
-          <col className="w-[38%]" />
-          <col className="w-[16%]" />
-          <col className="w-[10%]" />
-          <col className="w-[16%]" />
-          <col className="w-[20%]" />
-        </colgroup>
-        <thead>
-          <tr className="border-b border-slate-300 text-xs uppercase text-slate-500">
-            <th className="py-1">{t('bill.productName')}</th>
-            <th className="py-1 text-right">{t('bill.rate')}</th>
-            <th className="py-1 text-right">{t('bill.qty')}</th>
-            <th className="py-1 text-right">{t('bill.itemDiscount')}</th>
-            <th className="py-1 text-right">{t('bill.amount')}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.items.map((item, i) => (
-            <tr key={i} className="border-b border-slate-200">
-              <td className="truncate py-1.5 pr-2">{item.name}</td>
-              <td className="py-1.5 text-right">{formatPaiseAsRupees(item.ratePaise)}</td>
-              <td className="py-1.5 text-right">{item.qty}</td>
-              <td className="py-1.5 text-right">
-                {item.itemDiscountPct > 0 ? `${item.itemDiscountPct}%` : '—'}
-              </td>
-              <td className="py-1.5 text-right">{formatPaiseAsRupees(item.discountedAmountPaise)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="hidden sm:block">
+        <div className={`grid ${ITEM_GRID_COLS} gap-x-2 border-b border-slate-300 pb-1 text-left text-xs uppercase text-slate-500`}>
+          <div>{t('bill.productName')}</div>
+          <div className="text-right">{t('bill.rate')}</div>
+          <div className="text-right">{t('bill.qty')}</div>
+          <div className="text-right">{t('bill.itemDiscount')}</div>
+          <div className="text-right">{t('bill.amount')}</div>
+        </div>
+        {data.items.map((item, i) => (
+          <div
+            key={i}
+            className={`grid ${ITEM_GRID_COLS} gap-x-2 border-b border-slate-200 py-1.5`}
+          >
+            <div className="truncate pr-2">{item.name}</div>
+            <div className="text-right">{formatPaiseAsRupees(item.ratePaise)}</div>
+            <div className="text-right">{item.qty}</div>
+            <div className="text-right">
+              {item.itemDiscountPct > 0 ? `${item.itemDiscountPct}%` : '—'}
+            </div>
+            <div className="text-right">{formatPaiseAsRupees(item.discountedAmountPaise)}</div>
+          </div>
+        ))}
+      </div>
 
       <div className="mt-3 flex flex-col gap-1 border-t border-dashed border-slate-300 pt-2">
         <SummaryRow label={t('bill.totalProductAmount')} value={data.totalProductAmountPaise} />
