@@ -16,9 +16,7 @@ const A4_HEIGHT_MM = 297
 // A4BillLayout renders at 96 CSS px/inch * (210mm / 25.4mm-per-inch) ≈ 794px
 // wide before any scale factor. Pinning the offscreen container (and the
 // html2canvas capture) to this exact pixel width removes any ambiguity
-// html2canvas would otherwise have to guess at for an element sitting far
-// outside the visible viewport (left: -10000px) — that ambiguity was the
-// source of the right-edge clipping in the generated PDF.
+// html2canvas would otherwise have to guess at.
 const A4_WIDTH_PX = Math.round((A4_WIDTH_MM / 25.4) * 96)
 
 function waitForPaint(): Promise<void> {
@@ -45,9 +43,21 @@ function sliceCanvas(source: HTMLCanvasElement, startPx: number, heightPx: numbe
 export async function generateBillPdf(data: BillPreviewData): Promise<File> {
   const settings = await getCachedBusinessSettings()
   const container = document.createElement('div')
+  // Kept in normal viewport bounds (top:0, left:0) and hidden via opacity
+  // instead of shifted with a large negative offset (e.g. left: -10000px).
+  // html2canvas has documented bugs computing capture bounds/scale for
+  // elements positioned far outside the live viewport — the visual symptom
+  // is exactly what we were seeing: columns compressed/colliding and the
+  // right edge of the content clipped, because html2canvas's internal
+  // cloned-document sizing got confused by the extreme offset. Keeping the
+  // element at (0,0), non-interactive and invisible, avoids that class of
+  // bug entirely while still never being visible to the user.
   container.style.position = 'fixed'
-  container.style.left = '-10000px'
   container.style.top = '0'
+  container.style.left = '0'
+  container.style.opacity = '0'
+  container.style.pointerEvents = 'none'
+  container.style.zIndex = '-1'
   container.style.width = `${A4_WIDTH_PX}px`
   container.setAttribute('aria-hidden', 'true')
   document.body.appendChild(container)
@@ -63,6 +73,8 @@ export async function generateBillPdf(data: BillPreviewData): Promise<File> {
       scale: 2,
       width: A4_WIDTH_PX,
       windowWidth: A4_WIDTH_PX,
+      x: 0,
+      y: 0,
     })
     const pxPerMm = canvas.width / A4_WIDTH_MM
     const pageHeightPx = Math.floor(A4_HEIGHT_MM * pxPerMm)
