@@ -14,7 +14,15 @@ import type { BusinessSettings } from '../../types/settings'
  *   @media print { @page { size: A4; margin: 0; } html, body { margin: 0; padding: 0; } }
  * Without that reset, the browser's own print margins can squeeze this
  * 210mm-wide box into a narrower printable area and clip the right edge.
+ *
+ * The item grid intentionally uses CSS Grid, not <table>/<colgroup>. Native
+ * table column-width hints (via <col>) are unreliable across both browser
+ * print engines and html2canvas — columns can collide/overlap instead of
+ * respecting their assigned widths. `grid-template-columns` is rendered
+ * consistently by all three (screen, print, html2canvas capture).
  */
+const ITEM_GRID_COLS = 'grid-cols-[3.8fr_1.6fr_1fr_1.6fr_2fr]'
+
 export function A4BillLayout({ data, settings }: { data: BillPreviewData; settings?: BusinessSettings | null }) {
   const t = useT()
   return (
@@ -45,37 +53,29 @@ export function A4BillLayout({ data, settings }: { data: BillPreviewData; settin
         <p className="text-sm text-neutral-600">{data.customerMobile}</p>
       </div>
 
-      <table className="w-full table-fixed border-collapse text-sm">
-        <colgroup>
-          <col className="w-[38%]" />
-          <col className="w-[16%]" />
-          <col className="w-[10%]" />
-          <col className="w-[16%]" />
-          <col className="w-[20%]" />
-        </colgroup>
-        <thead>
-          <tr className="border-b-2 border-black text-left">
-            <th className="py-2">{t('bill.productName')}</th>
-            <th className="py-2 text-right">{t('bill.rate')}</th>
-            <th className="py-2 text-right">{t('bill.qty')}</th>
-            <th className="py-2 text-right">{t('bill.itemDiscount')}</th>
-            <th className="py-2 text-right">{t('bill.amount')}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.items.map((item, i) => (
-            <tr key={i} className="border-b border-neutral-200">
-              <td className="break-words py-2 pr-2">{item.name}</td>
-              <td className="py-2 text-right">{formatPaiseAsRupees(item.ratePaise)}</td>
-              <td className="py-2 text-right">{item.qty}</td>
-              <td className="py-2 text-right">
-                {item.itemDiscountPct > 0 ? `${item.itemDiscountPct}%` : '—'}
-              </td>
-              <td className="py-2 text-right">{formatPaiseAsRupees(item.discountedAmountPaise)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="text-sm">
+        <div className={`grid ${ITEM_GRID_COLS} gap-x-3 border-b-2 border-black pb-2 text-left font-semibold`}>
+          <div>{t('bill.productName')}</div>
+          <div className="text-right">{t('bill.rate')}</div>
+          <div className="text-right">{t('bill.qty')}</div>
+          <div className="text-right">{t('bill.itemDiscount')}</div>
+          <div className="text-right">{t('bill.amount')}</div>
+        </div>
+        {data.items.map((item, i) => (
+          <div
+            key={i}
+            className={`grid ${ITEM_GRID_COLS} gap-x-3 border-b border-neutral-200 py-2`}
+          >
+            <div className="break-words">{item.name}</div>
+            <div className="text-right">{formatPaiseAsRupees(item.ratePaise)}</div>
+            <div className="text-right">{item.qty}</div>
+            <div className="text-right">
+              {item.itemDiscountPct > 0 ? `${item.itemDiscountPct}%` : '—'}
+            </div>
+            <div className="text-right">{formatPaiseAsRupees(item.discountedAmountPaise)}</div>
+          </div>
+        ))}
+      </div>
 
       <div className="ml-auto mt-4 flex w-64 flex-col gap-1 text-sm">
         <Row label={t('bill.totalProductAmount')} value={data.totalProductAmountPaise} />
