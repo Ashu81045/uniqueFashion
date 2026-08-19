@@ -9,6 +9,11 @@ import type { BusinessSettings } from '../../types/settings'
  * html2canvas) as the source for the shareable PDF — see lib/share/generateBillPdf.ts.
  * `settings` is optional so this still renders sensibly before Settings has
  * ever been filled in (generic placeholders) or if the read hasn't resolved yet.
+ *
+ * NOTE: this component assumes the page/print context sets:
+ *   @media print { @page { size: A4; margin: 0; } html, body { margin: 0; padding: 0; } }
+ * Without that reset, the browser's own print margins can squeeze this
+ * 210mm-wide box into a narrower printable area and clip the right edge.
  */
 export function A4BillLayout({ data, settings }: { data: BillPreviewData; settings?: BusinessSettings | null }) {
   const t = useT()
@@ -40,7 +45,14 @@ export function A4BillLayout({ data, settings }: { data: BillPreviewData; settin
         <p className="text-sm text-neutral-600">{data.customerMobile}</p>
       </div>
 
-      <table className="w-full border-collapse text-sm">
+      <table className="w-full table-fixed border-collapse text-sm">
+        <colgroup>
+          <col className="w-[38%]" />
+          <col className="w-[16%]" />
+          <col className="w-[10%]" />
+          <col className="w-[16%]" />
+          <col className="w-[20%]" />
+        </colgroup>
         <thead>
           <tr className="border-b-2 border-black text-left">
             <th className="py-2">{t('bill.productName')}</th>
@@ -53,7 +65,7 @@ export function A4BillLayout({ data, settings }: { data: BillPreviewData; settin
         <tbody>
           {data.items.map((item, i) => (
             <tr key={i} className="border-b border-neutral-200">
-              <td className="py-2">{item.name}</td>
+              <td className="break-words py-2 pr-2">{item.name}</td>
               <td className="py-2 text-right">{formatPaiseAsRupees(item.ratePaise)}</td>
               <td className="py-2 text-right">{item.qty}</td>
               <td className="py-2 text-right">
