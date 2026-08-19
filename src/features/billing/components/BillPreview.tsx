@@ -68,7 +68,20 @@ export function BillPreview({ data }: { data: BillPreviewData }) {
         ))}
       </div>
 
-      <table className="hidden w-full border-collapse text-left sm:table">
+      {/*
+        table-fixed + colgroup: without this, an auto-layout table sizes its
+        Product Name column to fit the longest name, which can push the
+        Amount column past the card's right edge (clipped, not scrolled,
+        since this container has no overflow-x-auto).
+      */}
+      <table className="hidden w-full table-fixed border-collapse text-left sm:table">
+        <colgroup>
+          <col className="w-[38%]" />
+          <col className="w-[16%]" />
+          <col className="w-[10%]" />
+          <col className="w-[16%]" />
+          <col className="w-[20%]" />
+        </colgroup>
         <thead>
           <tr className="border-b border-slate-300 text-xs uppercase text-slate-500">
             <th className="py-1">{t('bill.productName')}</th>
@@ -81,7 +94,7 @@ export function BillPreview({ data }: { data: BillPreviewData }) {
         <tbody>
           {data.items.map((item, i) => (
             <tr key={i} className="border-b border-slate-200">
-              <td className="py-1.5">{item.name}</td>
+              <td className="truncate py-1.5 pr-2">{item.name}</td>
               <td className="py-1.5 text-right">{formatPaiseAsRupees(item.ratePaise)}</td>
               <td className="py-1.5 text-right">{item.qty}</td>
               <td className="py-1.5 text-right">
