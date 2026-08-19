@@ -168,6 +168,7 @@ input:-webkit-autofill:focus {
 .pb-safe {
   padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
 }
+
 @media print {
   @page {
     size: A4;
@@ -176,5 +177,13 @@ input:-webkit-autofill:focus {
   html, body {
     margin: 0;
     padding: 0;
+  }
+  /* BillDetailPage (and anywhere else) marks on-screen-only chrome with
+     this class — nav links, action buttons, the responsive BillPreview
+     card. Without hiding it here, that content still renders during print
+     underneath/alongside PrintRoot's fixed-position A4/thermal layout,
+     which looks like broken or overlapping output on the printed page. */
+  .no-print {
+    display: none !important;
   }
 }
