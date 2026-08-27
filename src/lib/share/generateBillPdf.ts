@@ -1,5 +1,5 @@
 import { jsPDF } from 'jspdf'
-import { drawA4Bill } from '../pdf/Drawa4bills'
+import { drawA4Bill } from '../pdf/DrawA4bill'
 import { buildBillLabels } from '../billing/billLabels'
 import { getCachedBusinessSettings } from '../../hooks/useBusinessSettings'
 import type { BillPreviewData } from '../../features/billing/components/BillPreview'

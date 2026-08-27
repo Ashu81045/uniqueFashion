@@ -1,4 +1,4 @@
-import { buildA4BillHtml } from './BuildA4BillHtml'
+import { buildA4BillHtml } from './buildA4BillHtml'
 import { buildBillLabels } from '../billing/billLabels'
 import type { BillPreviewData } from '../../features/billing/components/BillPreview'
 import type { BusinessSettings } from '../../types/settings'
