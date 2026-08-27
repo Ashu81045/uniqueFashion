@@ -17,6 +17,7 @@ import { RoleGate } from '../../components/layout/RoleGate'
 import { BillPreview } from '../billing/components/BillPreview'
 import { PrintRoot } from '../../components/print/PrintRoot'
 import { usePrintFormat } from '../../lib/print/usePrintFormat'
+import { printA4Bill } from '../../lib/print/printA4Bill'
 import { generateBillPdf } from '../../lib/share/generateBillPdf'
 import { shareBillToWhatsapp } from '../../lib/share/shareToWhatsapp'
 import { cancelBillTransaction } from '../../lib/numbering/cancelBillTransaction'
@@ -74,7 +75,7 @@ export function BillDetailPage() {
   async function handleDownloadPdf() {
     setDownloading(true)
     try {
-      const file = await generateBillPdf(previewData)
+      const file = await generateBillPdf(previewData, t)
       const url = URL.createObjectURL(file)
       const link = document.createElement('a')
       link.href = url
@@ -84,6 +85,10 @@ export function BillDetailPage() {
     } finally {
       setDownloading(false)
     }
+  }
+
+  function handlePrintA4() {
+    printA4Bill(previewData, settings, t)
   }
 
   async function handleShareWhatsapp() {
@@ -151,7 +156,7 @@ export function BillDetailPage() {
             <Printer size={15} />
             {t('bill.printThermal80')}
           </Button>
-          <Button variant="secondary" onClick={() => printAs('a4')}>
+          <Button variant="secondary" onClick={handlePrintA4}>
             <Printer size={15} />
             {t('bill.printA4')}
           </Button>
@@ -174,6 +179,8 @@ export function BillDetailPage() {
         </Card>
       </div>
 
+      {/* PrintRoot is now only reached by the thermal58/thermal80 buttons —
+          the A4 button prints via printA4Bill (native PDF print) instead. */}
       <PrintRoot format={activeFormat} data={previewData} settings={settings} />
     </>
   )
