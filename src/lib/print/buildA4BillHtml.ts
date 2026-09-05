@@ -182,7 +182,7 @@ export function buildA4BillHtml(
         <tr><td>${escapeHtml(labels.due)}</td><td class="val">${formatPaiseAsRupees(data.dueAmountPaise)}</td></tr>
       </table>
       <div class="due-date-box">
-        <span class="due-date-label">Due Date</span>
+        <span class="due-date-label">Bill Palti Date</span>
         <span class="due-date-value">${formatDisplayDate(dueDate)}</span>
       </div>
     </td>
