@@ -20,6 +20,7 @@ export interface BillPreviewData {
   amountPaidPaise: number
   dueAmountPaise: number
   paymentModes: BillPaymentModeSplit[]
+  customerAddress?: string
 }
 
 /**
