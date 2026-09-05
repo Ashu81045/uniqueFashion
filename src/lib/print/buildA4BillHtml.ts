@@ -41,12 +41,11 @@ function addDays(date: string | Date, days: number): Date {
  *
  * DUE DATE: bill date + 75 days, computed here with `addDays` so it always
  * stays in sync with the bill date even if that's edited later. It's
- * rendered in its own full-width, text-align:left block *after* the
- * payment-mode/summary table (not nested inside the summary table's fixed
- * 288px column), so it's always pinned to the left edge of the page
- * regardless of how that table lays out. Only shown when there's an
- * outstanding `dueAmountPaise` — a fully paid bill shows a "Fully Paid"
- * marker in the same slot/style instead.
+ * rendered right below the payment-mode line, in the same left-hand column
+ * (not the summary-table column on the right), so it reads as directly
+ * attached to that line rather than floating somewhere else on the page.
+ * Only shown when there's an outstanding `dueAmountPaise` — a fully paid
+ * bill shows a "Fully Paid" marker in the same slot/style instead.
  *
  * ⚠️ `data.customerAddress` is a field this layout expects on
  * `BillPreviewData`. If it doesn't exist on the type yet, add
@@ -134,12 +133,10 @@ export function buildA4BillHtml(
   .summary-table td.val { text-align: right; }
   .net-payable td { font-weight: 800; font-size: 18px; }
 
-  /* 5. Due date — its own full-width, left-aligned block after the
-     payment-mode/summary row, so it's always pinned to the page's left
-     edge no matter how that row lays out. Biggest, most visible text on
-     the page. Only rendered when there's an outstanding due amount. */
-  .due-date-wrap { width: 100%; text-align: left; margin-top: 12px; }
-  .due-date-box { display: inline-block; border: 4px solid #000; padding: 12px; text-align: left; }
+  /* 5. Due date — sits directly below the payment-mode line, in the same
+     left column. Biggest, most visible text on the page. Only rendered
+     when there's an outstanding due amount. */
+  .due-date-box { display: inline-block; border: 4px solid #000; padding: 12px; text-align: left; margin-top: 12px; }
   .due-date-label { font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.03em; display: block; }
   .due-date-value { font-size: 32px; font-weight: 800; line-height: 1; display: block; margin-top: 4px; }
   .fully-paid-value { font-size: 32px; font-weight: 800; text-transform: uppercase; line-height: 1; display: block; }
@@ -190,6 +187,14 @@ export function buildA4BillHtml(
   <table class="bottom-row"><tr>
     <td>
       <p class="payment-mode">${escapeHtml(labels.paymentMode)}: ${escapeHtml(paymentModeText)}</p>
+      <div class="due-date-box">
+        ${
+          data.dueAmountPaise > 0
+            ? `<span class="due-date-label">Due Date</span>
+        <span class="due-date-value">${formatDisplayDate(dueDate)}</span>`
+            : `<span class="fully-paid-value">Fully Paid</span>`
+        }
+      </div>
     </td>
     <td style="width:288px;">
       <table class="summary-table">
@@ -203,17 +208,6 @@ export function buildA4BillHtml(
       </table>
     </td>
   </tr></table>
-
-  <div class="due-date-wrap">
-    <div class="due-date-box">
-      ${
-        data.dueAmountPaise > 0
-          ? `<span class="due-date-label">Due Date</span>
-      <span class="due-date-value">${formatDisplayDate(dueDate)}</span>`
-          : `<span class="fully-paid-value">Fully Paid</span>`
-      }
-    </div>
-  </div>
 
   <div class="footer">${escapeHtml(settings?.invoiceFooter || 'Thank you for your business!')}</div>
 </body>
