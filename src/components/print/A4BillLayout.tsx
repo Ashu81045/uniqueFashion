@@ -139,10 +139,10 @@ export function A4BillLayout({ data, settings }: { data: BillPreviewData; settin
           <Row label={t('bill.amountPaid')} value={data.amountPaidPaise} />
           <Row label={t('bill.due')} value={data.dueAmountPaise} />
 
-          {/* 5. Due date — bottom right, bill date + 75 days */}
-          <div className="mt-2 flex justify-between border-2 border-black p-2 text-lg font-extrabold">
-            <span>Due Date</span>
-            <span>{formatDisplayDate(dueDate)}</span>
+          {/* 5. Due date — bottom right, bill date + 75 days. Biggest, most visible element in the breakup. */}
+          <div className="mt-3 flex flex-col items-end gap-1 border-4 border-black p-3">
+            <span className="text-base font-bold uppercase tracking-wide">Due Date</span>
+            <span className="text-[32px] font-extrabold leading-none">{formatDisplayDate(dueDate)}</span>
           </div>
         </div>
       </div>
