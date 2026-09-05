@@ -33,10 +33,18 @@ function addDays(date: string | Date, days: number): Date {
  * Kept in sync by hand with `A4BillLayout.tsx` (the React/Tailwind version
  * used for on-screen preview + the html2canvas share flow). Same structure,
  * same font-weight hierarchy, same all-black/no-grey palette, same due-date
- * rule. If you change one, change the other.
+ * rule, same numbered/uppercase item rows. If you change one, change the
+ * other.
+ *
+ * Item rows use tight padding (4px) so a long, itemized bill still fits as
+ * many rows per A4 page as possible without shrinking the type.
  *
  * DUE DATE: bill date + 75 days, computed here with `addDays` so it always
- * stays in sync with the bill date even if that's edited later.
+ * stays in sync with the bill date even if that's edited later. It's
+ * rendered in its own full-width, text-align:right block *after* the
+ * payment-mode/summary table (not nested inside the summary table's fixed
+ * 288px column), so it's always pinned to the right edge of the page
+ * regardless of how that table lays out.
  *
  * ⚠️ `data.customerAddress` is a field this layout expects on
  * `BillPreviewData`. If it doesn't exist on the type yet, add
@@ -54,7 +62,8 @@ export function buildA4BillHtml(
     .map(
       (item, i) => `
     <tr${i === data.items.length - 1 ? ' class="last"' : ''}>
-      <td>${escapeHtml(item.name)}</td>
+      <td class="num">${i + 1}</td>
+      <td class="item-name">${escapeHtml(item.name)}</td>
       <td class="num">${formatPaiseAsRupees(item.ratePaise)}</td>
       <td class="num">${item.qty}</td>
       <td class="num">${item.itemDiscountPct > 0 ? `${item.itemDiscountPct}%` : '—'}</td>
@@ -102,12 +111,14 @@ export function buildA4BillHtml(
   .customer-table .label { font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.03em; margin: 0 0 4px; color: #000; }
   .customer-table .value { font-size: 16px; font-weight: bold; margin: 0; color: #000; }
 
-  /* 3 & 4. Bigger/bolder fonts + full row & column grid lines */
-  .items-table { width: 100%; font-size: 14px; border: 2px solid #000; }
-  .items-table th, .items-table td { padding: 8px; text-align: left; border-right: 2px solid #000; }
+  /* 3 & 4. Bigger/bolder fonts + full row & column grid lines. Tight (4px) padding
+     so a long item list still fits as many rows per page as possible. */
+  .items-table { width: 100%; font-size: 13px; border: 2px solid #000; }
+  .items-table th, .items-table td { padding: 4px 6px; text-align: left; border-right: 2px solid #000; }
   .items-table th:last-child, .items-table td:last-child { border-right: none; }
   .items-table thead tr { border-bottom: 2px solid #000; font-weight: 800; }
   .items-table th.num, .items-table td.num { text-align: right; }
+  .items-table .item-name { text-transform: uppercase; }
   .items-table tbody tr { border-bottom: 2px solid #000; font-weight: 600; page-break-inside: avoid; }
   .items-table tbody tr.last { border-bottom: none; }
 
@@ -120,8 +131,12 @@ export function buildA4BillHtml(
   .summary-table td.val { text-align: right; }
   .net-payable td { font-weight: 800; font-size: 18px; }
 
-  /* 5. Due date — biggest, most visible element in the breakup */
-  .due-date-box { border: 4px solid #000; padding: 12px; margin-top: 12px; text-align: right; }
+  /* 5. Due date — its own full-width, right-aligned block after the
+     payment-mode/summary row, so it's always pinned to the page's right
+     edge no matter how that row lays out. Biggest, most visible text on
+     the page. */
+  .due-date-wrap { width: 100%; text-align: right; margin-top: 12px; }
+  .due-date-box { display: inline-block; border: 4px solid #000; padding: 12px; text-align: right; }
   .due-date-label { font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.03em; display: block; }
   .due-date-value { font-size: 32px; font-weight: 800; line-height: 1; display: block; margin-top: 4px; }
 
@@ -157,10 +172,11 @@ export function buildA4BillHtml(
 
   <table class="items-table">
     <thead><tr>
-      <th style="width:38%">${escapeHtml(labels.productName)}</th>
-      <th class="num" style="width:16%">${escapeHtml(labels.rate)}</th>
+      <th class="num" style="width:5%">#</th>
+      <th style="width:35%">${escapeHtml(labels.productName)}</th>
+      <th class="num" style="width:15%">${escapeHtml(labels.rate)}</th>
       <th class="num" style="width:10%">${escapeHtml(labels.qty)}</th>
-      <th class="num" style="width:16%">${escapeHtml(labels.itemDiscount)}</th>
+      <th class="num" style="width:15%">${escapeHtml(labels.itemDiscount)}</th>
       <th class="num" style="width:20%">${escapeHtml(labels.amount)}</th>
     </tr></thead>
     <tbody>${itemRows}
@@ -181,12 +197,15 @@ export function buildA4BillHtml(
         <tr><td>${escapeHtml(labels.amountPaid)}</td><td class="val">${formatPaiseAsRupees(data.amountPaidPaise)}</td></tr>
         <tr><td>${escapeHtml(labels.due)}</td><td class="val">${formatPaiseAsRupees(data.dueAmountPaise)}</td></tr>
       </table>
-      <div class="due-date-box">
-        <span class="due-date-label">Bill Palti Date</span>
-        <span class="due-date-value">${formatDisplayDate(dueDate)}</span>
-      </div>
     </td>
   </tr></table>
+
+  <div class="due-date-wrap">
+    <div class="due-date-box">
+      <span class="due-date-label">Bill Palti Date</span>
+      <span class="due-date-value">${formatDisplayDate(dueDate)}</span>
+    </div>
+  </div>
 
   <div class="footer">${escapeHtml(settings?.invoiceFooter || 'Thank you for your business!')}</div>
 </body>
