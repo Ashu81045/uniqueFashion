@@ -67,7 +67,7 @@ export function A4BillLayout({ data, settings }: { data: BillPreviewData; settin
           {t('bill.number')}: <span>{data.billNo === 'draft' ? '—' : data.billNo}</span>
         </p>
         <p>
-          Bill Date: <span>{formatDisplayDate(data.date)}</span>
+          Bill Datess: <span>{formatDisplayDate(data.date)}</span>
         </p>
       </div>
 
