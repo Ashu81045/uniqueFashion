@@ -43,17 +43,17 @@ export function A4BillLayout({ data, settings }: { data: BillPreviewData; settin
   const dueDate = addDays(data.date, 75)
 
   return (
-    <div className="w-[210mm] bg-white p-[15mm] text-black">
+    <div className="w-[210mm] bg-white p-[15mm] text-[#000000] opacity-100">
       {/* 1. Brand name — centered, bold, big */}
       <div className="mb-4 border-b-4 border-black pb-4 text-center">
         <h1 className="text-4xl font-extrabold uppercase tracking-wide">
           {settings?.businessName || t('app.name')}
         </h1>
-        <p className="mt-1 text-base font-semibold text-black">
+        <p className="mt-1 text-base font-semibold text-[#000000] opacity-100">
           {settings?.address || 'Wholesale Garments'}
         </p>
         {(settings?.phone || settings?.gstNumber) && (
-          <p className="mt-0.5 text-sm font-medium text-black">
+          <p className="mt-0.5 text-sm font-medium text-[#000000] opacity-100">
             {settings?.phone && `Ph: ${settings.phone}`}
             {settings?.phone && settings?.gstNumber && ' | '}
             {settings?.gstNumber && `GSTIN: ${settings.gstNumber}`}
@@ -74,17 +74,17 @@ export function A4BillLayout({ data, settings }: { data: BillPreviewData; settin
       {/* 2. First row: Name, Number, Address — bordered columns */}
       <div className="mb-6 grid grid-cols-3 divide-x-2 divide-black border-2 border-black text-base">
         <div className="p-2">
-          <p className="text-xs font-bold uppercase tracking-wide text-black">
+          <p className="text-xs font-bold uppercase tracking-wide text-[#000000] opacity-100">
             {t('bill.customer')}
           </p>
           <p className="text-lg font-bold">{data.customerName}</p>
         </div>
         <div className="p-2">
-          <p className="text-xs font-bold uppercase tracking-wide text-black">Number</p>
+          <p className="text-xs font-bold uppercase tracking-wide text-[#000000] opacity-100">Number</p>
           <p className="text-lg font-bold">{data.customerMobile}</p>
         </div>
         <div className="p-2">
-          <p className="text-xs font-bold uppercase tracking-wide text-black">Address</p>
+          <p className="text-xs font-bold uppercase tracking-wide text-[#000000] opacity-100">Address</p>
           {/* Manually entered — no existing source field for this yet */}
           <p className="text-lg font-bold">{data.customerAddress || '—'}</p>
         </div>
@@ -120,7 +120,7 @@ export function A4BillLayout({ data, settings }: { data: BillPreviewData; settin
       </div>
 
       <div className="mt-6 flex items-start justify-between gap-6">
-        <div className="text-base font-semibold text-black">
+        <div className="text-base font-semibold text-[#000000] opacity-100">
           <p>
             {t('bill.paymentMode')}:{' '}
             {data.paymentModes.map((m) => t(`bill.paymentMode.${m.mode}`)).join(', ') || '—'}
@@ -147,7 +147,7 @@ export function A4BillLayout({ data, settings }: { data: BillPreviewData; settin
         </div>
       </div>
 
-      <p className="mt-10 border-t-2 border-black pt-4 text-center text-sm font-semibold text-black">
+      <p className="mt-10 border-t-2 border-black pt-4 text-center text-sm font-semibold text-[#000000] opacity-100">
         {settings?.invoiceFooter || 'Thank you for your business!'}
       </p>
     </div>
