@@ -21,15 +21,18 @@ import type { BusinessSettings } from '../../types/settings'
  * respecting their assigned widths. `grid-template-columns` is rendered
  * consistently by all three (screen, print, html2canvas capture).
  *
- * Row padding is intentionally tight (py-1) so a long, itemized bill still
- * fits as many rows per A4 page as possible without shrinking the type.
+ * Row padding is intentionally tight (py-0.5, text-xs) so a long, itemized
+ * bill still fits as many rows per A4 page as possible without shrinking
+ * past legibility.
  *
  * DUE DATE: per the shop's own rule (bill date + 75 days), computed here
  * with `addDays` rather than stored, so it always stays in sync with the
  * bill date even if that's edited later. It's rendered as its own
- * full-width `justify-end` block (not nested inside the summary column)
- * so it's always pinned to the right edge of the page regardless of how
- * wide the payment-mode text next to it happens to be.
+ * full-width `justify-start` block (not nested inside the summary column)
+ * so it's always pinned to the left edge of the page regardless of how
+ * wide the payment-mode text next to it happens to be. It only appears
+ * when there's an outstanding `dueAmountPaise` — a fully paid bill shows
+ * a "Fully Paid" marker in the same slot/style instead.
  *
  * ⚠️ `data.customerAddress` is a NEW field this layout expects on
  * `BillPreviewData`. It doesn't exist on the type yet — add
@@ -96,34 +99,34 @@ export function A4BillLayout({ data, settings }: { data: BillPreviewData; settin
         </div>
       </div>
 
-      {/* 3 & 4. Bigger/bolder fonts + full row & column grid lines. Slim (py-1) rows so long
-          item lists still fit as many rows per page as possible. */}
-      <div className="border-2 border-black text-sm">
+      {/* 3 & 4. Bigger/bolder fonts + full row & column grid lines. Tight (py-0.5, text-xs)
+          rows so long item lists still fit as many rows per page as possible. */}
+      <div className="border-2 border-black text-xs">
         <div
           className={`grid ${ITEM_GRID_COLS} divide-x-2 divide-black border-b-2 border-black font-extrabold`}
         >
-          <div className="px-2 py-1 text-right">#</div>
-          <div className="px-2 py-1">{t('bill.productName')}</div>
-          <div className="px-2 py-1 text-right">{t('bill.rate')}</div>
-          <div className="px-2 py-1 text-right">{t('bill.qty')}</div>
-          <div className="px-2 py-1 text-right">{t('bill.itemDiscount')}</div>
-          <div className="px-2 py-1 text-right">{t('bill.amount')}</div>
+          <div className="px-1.5 py-0.5 text-right">#</div>
+          <div className="px-1.5 py-0.5">{t('bill.productName')}</div>
+          <div className="px-1.5 py-0.5 text-right">{t('bill.rate')}</div>
+          <div className="px-1.5 py-0.5 text-right">{t('bill.qty')}</div>
+          <div className="px-1.5 py-0.5 text-right">{t('bill.itemDiscount')}</div>
+          <div className="px-1.5 py-0.5 text-right">{t('bill.amount')}</div>
         </div>
         {data.items.map((item, i) => (
           <div
             key={i}
             className={`grid ${ITEM_GRID_COLS} divide-x-2 divide-black font-semibold ${
-              i === data.items.length - 1 ? '' : 'border-b-2 border-black'
+              i === data.items.length - 1 ? '' : 'border-b border-black'
             }`}
           >
-            <div className="px-2 py-1 text-right">{i + 1}</div>
-            <div className="break-words px-2 py-1 uppercase">{item.name}</div>
-            <div className="px-2 py-1 text-right">{formatPaiseAsRupees(item.ratePaise)}</div>
-            <div className="px-2 py-1 text-right">{item.qty}</div>
-            <div className="px-2 py-1 text-right">
+            <div className="px-1.5 py-0.5 text-right">{i + 1}</div>
+            <div className="break-words px-1.5 py-0.5 uppercase">{item.name}</div>
+            <div className="px-1.5 py-0.5 text-right">{formatPaiseAsRupees(item.ratePaise)}</div>
+            <div className="px-1.5 py-0.5 text-right">{item.qty}</div>
+            <div className="px-1.5 py-0.5 text-right">
               {item.itemDiscountPct > 0 ? `${item.itemDiscountPct}%` : '—'}
             </div>
-            <div className="px-2 py-1 text-right">{formatPaiseAsRupees(item.discountedAmountPaise)}</div>
+            <div className="px-1.5 py-0.5 text-right">{formatPaiseAsRupees(item.discountedAmountPaise)}</div>
           </div>
         ))}
       </div>
@@ -150,13 +153,20 @@ export function A4BillLayout({ data, settings }: { data: BillPreviewData; settin
         </div>
       </div>
 
-      {/* 5. Due date — its own full-width right-pinned block. Biggest, most visible
-          element on the page, and always right regardless of the summary column's width. */}
-      <div className="mt-3 flex justify-end">
-        <div className="flex flex-col items-end gap-1 border-4 border-black p-3">
-          <span className="text-base font-bold uppercase tracking-wide">Due Date</span>
-          <span className="text-[32px] font-extrabold leading-none">{formatDisplayDate(dueDate)}</span>
-        </div>
+      {/* 5. Due date — its own full-width left-pinned block. Biggest, most visible
+          element on the page. Only shown when there's actually an outstanding
+          due amount; a fully settled bill shows "Fully Paid" in the same slot. */}
+      <div className="mt-3 flex justify-start">
+        {data.dueAmountPaise > 0 ? (
+          <div className="flex flex-col items-start gap-1 border-4 border-black p-3">
+            <span className="text-base font-bold uppercase tracking-wide">Due Date</span>
+            <span className="text-[32px] font-extrabold leading-none">{formatDisplayDate(dueDate)}</span>
+          </div>
+        ) : (
+          <div className="flex flex-col items-start gap-1 border-4 border-black p-3">
+            <span className="text-[32px] font-extrabold uppercase leading-none">Fully Paid</span>
+          </div>
+        )}
       </div>
 
       <p className="mt-10 border-t-2 border-black pt-4 text-center text-sm font-semibold text-[#000000] opacity-100">

@@ -36,15 +36,17 @@ function addDays(date: string | Date, days: number): Date {
  * rule, same numbered/uppercase item rows. If you change one, change the
  * other.
  *
- * Item rows use tight padding (4px) so a long, itemized bill still fits as
- * many rows per A4 page as possible without shrinking the type.
+ * Item rows use very tight padding (3px) and 12px type so a long, itemized
+ * bill still fits as many rows per A4 page as possible.
  *
  * DUE DATE: bill date + 75 days, computed here with `addDays` so it always
  * stays in sync with the bill date even if that's edited later. It's
- * rendered in its own full-width, text-align:right block *after* the
+ * rendered in its own full-width, text-align:left block *after* the
  * payment-mode/summary table (not nested inside the summary table's fixed
- * 288px column), so it's always pinned to the right edge of the page
- * regardless of how that table lays out.
+ * 288px column), so it's always pinned to the left edge of the page
+ * regardless of how that table lays out. Only shown when there's an
+ * outstanding `dueAmountPaise` — a fully paid bill shows a "Fully Paid"
+ * marker in the same slot/style instead.
  *
  * ⚠️ `data.customerAddress` is a field this layout expects on
  * `BillPreviewData`. If it doesn't exist on the type yet, add
@@ -111,15 +113,16 @@ export function buildA4BillHtml(
   .customer-table .label { font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.03em; margin: 0 0 4px; color: #000; }
   .customer-table .value { font-size: 16px; font-weight: bold; margin: 0; color: #000; }
 
-  /* 3 & 4. Bigger/bolder fonts + full row & column grid lines. Tight (4px) padding
-     so a long item list still fits as many rows per page as possible. */
-  .items-table { width: 100%; font-size: 13px; border: 2px solid #000; }
-  .items-table th, .items-table td { padding: 4px 6px; text-align: left; border-right: 2px solid #000; }
+  /* 3 & 4. Bigger/bolder fonts + full row & column grid lines. Very tight (3px)
+     padding and 12px type so a long item list still fits as many rows per page
+     as possible. */
+  .items-table { width: 100%; font-size: 12px; border: 2px solid #000; }
+  .items-table th, .items-table td { padding: 3px 5px; text-align: left; border-right: 2px solid #000; }
   .items-table th:last-child, .items-table td:last-child { border-right: none; }
   .items-table thead tr { border-bottom: 2px solid #000; font-weight: 800; }
   .items-table th.num, .items-table td.num { text-align: right; }
   .items-table .item-name { text-transform: uppercase; }
-  .items-table tbody tr { border-bottom: 2px solid #000; font-weight: 600; page-break-inside: avoid; }
+  .items-table tbody tr { border-bottom: 1px solid #000; font-weight: 600; page-break-inside: avoid; }
   .items-table tbody tr.last { border-bottom: none; }
 
   .bottom-row { width: 100%; margin-top: 24px; }
@@ -131,14 +134,15 @@ export function buildA4BillHtml(
   .summary-table td.val { text-align: right; }
   .net-payable td { font-weight: 800; font-size: 18px; }
 
-  /* 5. Due date — its own full-width, right-aligned block after the
-     payment-mode/summary row, so it's always pinned to the page's right
+  /* 5. Due date — its own full-width, left-aligned block after the
+     payment-mode/summary row, so it's always pinned to the page's left
      edge no matter how that row lays out. Biggest, most visible text on
-     the page. */
-  .due-date-wrap { width: 100%; text-align: right; margin-top: 12px; }
-  .due-date-box { display: inline-block; border: 4px solid #000; padding: 12px; text-align: right; }
+     the page. Only rendered when there's an outstanding due amount. */
+  .due-date-wrap { width: 100%; text-align: left; margin-top: 12px; }
+  .due-date-box { display: inline-block; border: 4px solid #000; padding: 12px; text-align: left; }
   .due-date-label { font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.03em; display: block; }
   .due-date-value { font-size: 32px; font-weight: 800; line-height: 1; display: block; margin-top: 4px; }
+  .fully-paid-value { font-size: 32px; font-weight: 800; text-transform: uppercase; line-height: 1; display: block; }
 
   .footer { margin-top: 40px; border-top: 2px solid #000; padding-top: 16px; text-align: center; font-size: 12px; font-weight: 600; color: #000; }
 </style>
@@ -202,8 +206,12 @@ export function buildA4BillHtml(
 
   <div class="due-date-wrap">
     <div class="due-date-box">
-      <span class="due-date-label">Bill Palti Date</span>
-      <span class="due-date-value">${formatDisplayDate(dueDate)}</span>
+      ${
+        data.dueAmountPaise > 0
+          ? `<span class="due-date-label">Due Date</span>
+      <span class="due-date-value">${formatDisplayDate(dueDate)}</span>`
+          : `<span class="fully-paid-value">Fully Paid</span>`
+      }
     </div>
   </div>
 
