@@ -190,7 +190,7 @@ export function buildA4BillHtml(
       <div class="due-date-box">
         ${
           data.dueAmountPaise > 0
-            ? `<span class="due-date-label">Due Date</span>
+            ? `<span class="due-date-label">Bill Palti Date</span>
         <span class="due-date-value">${formatDisplayDate(dueDate)}</span>`
             : `<span class="fully-paid-value">Fully Paid</span>`
         }
