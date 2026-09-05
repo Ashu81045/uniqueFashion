@@ -47,7 +47,7 @@ function addDays(date: string | Date, days: number): Date {
   return d
 }
 
-export function A4BillLayout({ data, settings }: { data: BillPreviewData; settings?: BusinessSettings | null }) {
+export function printA4Bill({ data, settings }: { data: BillPreviewData; settings?: BusinessSettings | null }) {
   const t = useT()
   const dueDate = addDays(data.date, 75)
 
